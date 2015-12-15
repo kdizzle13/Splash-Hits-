@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+public class HW6b_Substring {
+    public HW6b_Substring(String a, String b) {
+        this.a = a;
+        this.b = b;
+   
+        initDp();
+    }   
+    // strings a, b
+    private String a;
+    private String b;
+   
+    // length(i,j) - maximum length of common strings that end at a[i] and b[j].
+     
+    private int length[][];
+   
+    // max length - stores max length
+    private int maxLength;
+    private int maxI;
+    private int maxJ;
+   
+    private void updateMaxLength(int length, int i, int j) {
+        if (maxLength < length) {
+            maxLength = length;
+            maxI = i;
+            maxJ = j;
+        }
+    }
+   
+    private void initialMaxLength() {
+        maxLength = 0;
+        maxI = -1;
+        maxJ = -1;
+    }
+   
+    private void initDp() {
+        initialMaxLength();
+   
+        // initialize with 0 by default
+        length = new int[a.length() + 1][b.length() + 1];
+   
+        // this can be skipped
+        for (int i = 0; i <= a.length(); i++)
+            length[i][0] = 0;
+        for (int j = 0; j <= b.length(); j++)
+            length[0][j] = 0;
+   
+        for (int i = 1; i <= a.length(); i++) {
+            for (int j = 1; j <= b.length(); j++) {
+                length[i][j] = (a.charAt(i - 1) != b.charAt(j - 1)) ? 0 : length[i - 1][j - 1] + 1;
+                updateMaxLength(length[i][j], i, j);
+            }
+        }
+    }
+   
+    public void printLs() {
+        System.out.printf("%1$c ", ' ');
+        for (int j = 0; j <= b.length(); j++)
+            System.out.printf("%1$c ", (j == 0) ? ' ' : b.charAt(j - 1));
+        System.out.printf("\n");
+   
+        for (int i = 0; i <= a.length(); i++) {
+            System.out.printf("%1$c ", (i == 0) ? ' ' : a.charAt(i - 1));
+   
+            for (int j = 0; j <= b.length(); j++) {
+                System.out.printf("%1$d ", length[i][j]);
+            }
+            System.out.printf("\n");
+        }
+    }
+   
+    public String getLcs() {
+        int size = length[maxI][maxJ];
+        char sb[] = new char[size];
+   
+        for(int l=0; l<size; l++)
+            sb[l] = a.charAt(maxI-size+l);
+        return new String(sb);
+    }
+   
+    public static void main(String[] args) {
+    	String a, b; 
+		
+		System.out.println("We are trying to find the longest common SUBSTRING between two inputs");  //text
+		System.out.println("Please enter two strings\n"); //text
+		
+		Scanner input = new Scanner(System.in);  //scans in input from the user
+		
+		a = input.nextLine();   //user enters this string information, is stored in string a
+		b = input.nextLine();   //user enters this string information, is stored in string b						    	
+    	
+        HW6b_Substring lcs = new HW6b_Substring(a, b);
+           
+        lcs.printLs();
+        System.out.printf("The longest common substring is %1$s\n", lcs.getLcs());
+    }
+}
