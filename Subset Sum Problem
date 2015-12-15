@@ -1,0 +1,25 @@
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+ 
+/* Name of the class has to be "Main" only if the class is public. */
+public class Subset
+{
+	public static void main(String[] args) {
+		int [] A = {13,4,5,2,3,9};
+		int sum = 17;
+		System.out.println(naiveSum(A,0,sum));
+	}
+	/*recursive approach TIME IS EXPONENTIAL O (2^n)*/
+	private static boolean naiveSum(int[] A, int n, int sum) {
+		if (A[n]==sum){
+			System.out.println("yes");
+			return true;
+		}
+		else if (n==A.length-1){
+			System.out.println("no");
+			return false;
+		}		
+		return (naiveSum(A, n+1, sum-A[n]) || naiveSum(A, n+1, sum)); 		
+	}
+}
