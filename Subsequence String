@@ -1,0 +1,79 @@
+import java.util.Scanner;
+public class HW6a_Subsequence {
+	//using mem­o­iza­tion, store solution of common string 
+	public static int find(char[] C, char[] D) {  //compares characters of user inputs 
+		int[][] LCS = new int[C.length + 1][D.length + 1];
+		String[][] solution = new String[C.length + 1][D.length + 1];
+		// check of C string; if C is null then LCS of C, D =0
+		for (int i = 0; i <= D.length; i++) {
+			LCS[0][i] = 0;
+			solution[0][i] = "0";
+		}
+
+		// check of D string; if D is null then LCS of C, D =0
+		for (int i = 0; i <= C.length; i++) {
+			LCS[i][0] = 0;
+			solution[i][0] = "0";
+		}
+
+		for (int i = 1; i <= C.length; i++) {
+			for (int j = 1; j <= D.length; j++) {
+				if (C[i - 1] == D[j - 1]) {
+					LCS[i][j] = LCS[i - 1][j - 1] + 1;
+					solution[i][j] = "diagonal";
+				} else {
+					LCS[i][j] = Math.max(LCS[i - 1][j], LCS[i][j - 1]);
+					if (LCS[i][j] == LCS[i - 1][j]) {
+						solution[i][j] = "top";
+					} else {
+						solution[i][j] = "left";
+					}
+				}
+			}
+		}
+		// prints the common string of the two inputs
+		String x = solution[C.length][D.length];
+		String answer = "";
+		int A = C.length;
+		int B = D.length;
+		while (x != "0") {
+			if (solution[A][B] == "diagonal") {
+				answer = C[A - 1] + answer;
+				A--;
+				B--;
+			} else if (solution[A][B] == "left") {
+				B--;
+			} else if (solution[A][B] == "top") {
+				A--;
+			}
+			x = solution[A][B];
+		}
+		System.out.println("\nThe common string is: "+answer);		
+
+	//Display dynamic programming result 
+ 		for (int i = 0; i <= C.length; i++) {
+			for (int j = 0; j <= D.length; j++) {
+				System.out.print(" " + LCS[i][j]);
+			}
+			System.out.println();
+		}
+		return LCS[C.length][D.length];		
+	}
+
+	//Main program code 
+	public static void main(String[] args) {
+		String C, D; 
+		
+		System.out.println("We are trying to find the longest common SUBSEQUENCE between two inputs");  //text
+		System.out.println("Please enter two strings\n"); //text
+		
+		Scanner input = new Scanner(System.in);  //scans in input from the user
+		
+		C = input.nextLine();   //user enters this string information, is stored in string C
+		D = input.nextLine();   //user enters this string information, is stored in string D		
+			
+		System.out.println("The length of the longest common string between "+C+" and "+D+" is: " + 
+		find(C.toCharArray(), D.toCharArray())+" characters");		
+	
+	}
+}
