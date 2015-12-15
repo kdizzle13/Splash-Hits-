@@ -1,0 +1,152 @@
+import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+
+public class HW3 {
+	public static int N = 21;
+    public static int M = 13;
+    public static int P = M+N;
+	public static int []a = new int[N];
+    public static int []b = new int[M];
+     // Array C of sum of size of the two sorted array A and B
+    public static int []c = new int[a.length+b.length];
+
+//finding the kth value
+    public static void swap(int dex1, int dex2) 
+    {
+        int temp1 = c[dex1];
+        c[dex1] = c[dex2];
+        c[dex2] = temp1;
+        
+    }
+    public static int partition(int start, int end)   {
+        int i = start + 1;
+        int j = i;
+        int pivot = start;
+        for (; i < end; i++) 
+        {
+            if (c[i] < c[pivot]) 
+            {
+                swap(i, j); //has to match elements from swap above
+                j++;
+            }
+        }
+        if (j <= end)
+            swap(pivot, (j - 1));
+        return j - 1;
+    }
+    public static void quick_sort(int start, int end, int K) {
+        int part;
+        if (start < end) 
+        {
+            part = partition(start, end);
+            if (part == K - 1)
+                System.out.println("kth smallest element : " + c[part]);
+
+            if (part > K - 1)
+                quick_sort(start, part, K);
+
+            else
+                quick_sort(part + 1, end, K);
+        }
+        return;
+    }
+//finding the kth value
+
+    //merging the arrays 
+    public static void merge(int []a, int []b, int []c){
+       int cursorA = 0,cursorB = 0,cursorC = 0;
+	        int sizeA = a.length;
+	        int sizeB = b.length;
+	        // Runs until neither array is empty
+	        while(cursorA < sizeA && cursorB < sizeB){
+	            // Compare the items of two arrays and copy the smaller item into to third array
+	            if(a[cursorA] < b[cursorB]){
+	                c[cursorC++] = a[cursorA++];
+	            }else{
+	                c[cursorC++] = b[cursorB++];
+	            }
+	        }
+	        // If array B's cursor scanned and compared all the items of the array
+	        // but array A's is not
+	        while(cursorA < sizeA){
+	            c[cursorC++] = a[cursorA++];
+	        }
+	        // If array A's cursor scanned and compared all the items of the array
+	        // but array B's is not
+	        while(cursorB < sizeB){
+	            c[cursorC++] = b[cursorB++];
+	        }
+	    }
+	    public static void printArray(int []array){
+	        for(int i : array){
+	            System.out.print(i+" ");
+	        }
+	    }
+	  //merging the arrays 	    
+	    
+	    //finally, the main program!
+	    public static void main(String args[]) {
+	    	
+	    	//creating first array
+	    	Random random1 = new Random();
+	        for (int i = 0; i < N; i++)
+	            a[i] = random1.nextInt(1000);
+	        	 	        	
+	        System.out.println("The original sequence of the FIRST array is:  ");	        
+	        for (int i = 0; i < N; i++){
+	            System.out.print(a[i] + " ");
+	        }	        	
+	        
+	        String newLine1 = System.getProperty("line.separator");//This start code in a new retrieve line
+	        
+	        Arrays.sort(a);       
+        	System.out.println(newLine1+newLine1+"\tThe sorted FIRST array is:  ");        	
+	        for (int i = 0; i < N; i++){
+	        	
+	            System.out.print(a[i] + " ");
+	        }
+        	
+	        //end of first array
+	        	
+	        	//creating second array
+		    		Random random2 = new Random();
+		    		for (int j = 0; j < M; j++)
+		            b[j] = random2.nextInt(1000);
+		        	
+		        	String newLine2 = System.getProperty("line.separator");//This start code in a new retrieve line
+		        	System.out.println(newLine2+newLine2+"The original sequence of the SECOND array is:  ");	        
+		        	for (int j = 0; j < M; j++){
+		            System.out.print(b[j] + " ");
+		        	}	        	
+		       
+		        	Arrays.sort(b);
+		        	System.out.println(newLine2+newLine2+"\tThe sorted SECOND array is:  ");	        
+			        for (int j = 0; j < M; j++){
+			            System.out.print(b[j] + " ");
+			        }			        
+		        //end of second array			        	    		    	
+	    	
+		    String newLine = System.getProperty("line.separator");//This start code in a new retrieve line   
+	        merge(a,b,c);
+  
+	        System.out.print(newLine+newLine+"The merged and sorted FIRST array + SECOND array: ");	        
+	        Arrays.sort(c);
+	        
+        	System.out.println(newLine+" ");	        
+	        for (int j = 0; j < P; j++){
+	            System.out.print(c[j] + " ");
+	        }
+	        
+	      //finding the kth element  	
+	        
+	        Scanner sc = new Scanner(System.in);
+	        
+	        System.out.println(newLine+"\nEnter the Kth element you want to find between the arrays: ");
+	        int k = sc.nextInt();  //nextInt - problem
+	        quick_sort(0, P, k); //all three are integers 	        
+	        sc.close();
+    }
+	    
+}
+	
