@@ -1,0 +1,55 @@
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
+//Checks to see if an Instagram URL is verified (has the blue checkmark) or not
+
+public class IG_VerifyOrNot {
+
+	public static void main(String[] args) {
+
+		try {
+			String webPage = "https://www.instagram.com/jodiesweetin/";		//Jodie Sweetin is Verified user
+			//String webPage = "https://www.instagram.com/kdizzzzle13/";	//Not verified user
+			URL url = new URL(webPage);
+			URLConnection urlConnection = url.openConnection();
+			InputStream is = urlConnection.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is);
+
+			int numCharsRead;
+			char[] charArray = new char[1024];
+			StringBuffer sb = new StringBuffer();
+			while ((numCharsRead = isr.read(charArray)) > 0) {
+				sb.append(charArray, 0, numCharsRead);
+			}
+			String result = sb.toString();
+			String check = result;
+
+			System.out.println("The IG URL is "+url);
+			System.out.println("\n*** BEGIN ***\n");
+			System.out.println(result);
+			System.out.println("\n*** END ***\n");
+			
+			int value = check.indexOf("\"is_verified\":true");				
+			//checks for source code "is_verified":true and returns corresponding index value if found
+				//and returns index value -1 if not found 
+			
+			if(value==-1)
+	       System.out.println("\n\n   This Instagram user is NOT verified");        	       
+	          else 
+	          	System.out.println("\n\n   This Instagram user is verified"); 
+			//if statement stating if index of value -1 is found, then the user is NOT Verified
+				//else the user is Verified 
+			
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
